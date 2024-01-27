@@ -3,4 +3,10 @@ title: Home
 layout: home
 ---
 
-This is a *bare-minimum* template to create a Jekyll site that uses the [Just the Docs] theme. You can easily set the created site to be published on [GitHub Pages] – the [README] file explains how to do that, along with other details.
+# Обо мне
+Добрый день!\
+Меня зовут Храмов Евгений. Я Android разработчик со стажем 12 лет.\
+С августа 2021 я работаю в [Hoff Tech](https://hofftech.ru/) на позиции Android Tech Lead.
+
+### Оглавление
+1. [Резюме](https://hram.github.io/hram/pages/resume.html)
