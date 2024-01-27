@@ -1,3 +1,9 @@
+---
+layout: default
+title: Configuration
+nav_order: 2
+---
+
 ## Team Lead (Android)/Руководитель мобильной разработки
 Опыт работы 22 года 5 месяцев
 
