@@ -1,12 +1,12 @@
 ## Team Lead (Android)/Руководитель мобильной разработки
 Опыт работы 22 года 5 месяцев
 
-1. Hoff Tech [Android tech lead](#Android-team-lead)
+1. Hoff Tech [Android tech lead](#Android-tech-lead)
 2. Nexign [Android team lead](#Android-team-lead)
 3. e-Legion [Android программист](#Программист-Android)
 4. Argus-Spectr [Руководитель проекта, C# программист](#Руководитель-проекта,-C#-программист)
 
-### Android Tech Lead
+### Android tech lead
 Август 2021 — настоящее вреся (2 года 6 мес.)\
 Москва, [Hoff Tech](https://hofftech.ru/)
 
