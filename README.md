@@ -4,6 +4,7 @@
 С августа 2021 я работаю в [Hoff Tech](https://hofftech.ru/) на позиции Android Tech Lead.
 
 ### Оглавление
+1. [Резюме](pages/resume.md)
 
 <!--
 **hram/hram** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
