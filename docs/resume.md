@@ -7,16 +7,24 @@ nav_order: 2
 ## Team Lead (Android)/Руководитель мобильной разработки
 Опыт работы 22 года 5 месяцев
 
+## Опыт работы
+{: .no_toc .text-delta }
+
+1. TOC
+   {:toc}
+
+---
+
 1. Hoff Tech [Android tech lead](#android-tech-lead)
 2. Nexign [Android team lead](#android-team-lead)
 3. e-Legion [Android программист](#программист-android)
 4. Argus-Spectr [Руководитель проекта, C# программист](#руководитель-проекта-c-программист)
 
-### Android tech lead
+### Hoff Tech Android tech lead
 Август 2021 — настоящее вреся (2 года 6 мес.)\
 Москва, [Hoff Tech](https://hofftech.ru/)
 
-### Android team lead
+### Nexign Android team lead
 Август 2018 — Август 2021 (3 года)\
 Санкт-Петербург, [Nexign](nexign.com/ru)
 
@@ -56,7 +64,7 @@ nav_order: 2
 - ставил задачи outsource звену
 - настроил сборку и выкладку приложения в AppStore
 
-### Программист Android
+### e-Legion Программист Android
 Санкт-Петербург, [www.e-legion.ru](www.e-legion.ru)
 
 Заказная (outsource) разработка Android приложений. Поддержка и создание с нуля
@@ -73,7 +81,7 @@ nav_order: 2
 
 6. [Yota](https://old.e-legion.ru/portfolio/projects/yota/) — Мобильное приложение для абонентов Yota
 
-### Руководитель проекта, C# программист
+### Argus-Spectr Руководитель проекта, C# программист
 Ноябрь 2008 — Август 2015 (6 лет 10 месяцев)
 Санкт-Петербург, [Argus-Spectr](www.argus-spectr.ru)
 
