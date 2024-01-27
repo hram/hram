@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Configuration
+title: Резюме
 nav_order: 2
 ---
 
