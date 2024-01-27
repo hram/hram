@@ -11,4 +11,4 @@ permalink: /
 С августа 2021 я работаю в [Hoff Tech](https://hofftech.ru/) на позиции Android Tech Lead.
 
 ### Оглавление
-1. [Резюме](https://hram.github.io/hram/pages/resume.html)
+1. [Резюме]({% link docs/resume.md %})
