@@ -12,3 +12,4 @@ permalink: /
 
 ### Оглавление
 1. [Резюме]({% link docs/resume.md %})
+2. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
