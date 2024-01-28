@@ -3,3 +3,9 @@ title: null
 theme: just-the-docs
 
 url: https://hram.github.io/hram/
+
+nav_external_links:
+  - title: Мой Tech Radar
+    url: https://hram.github.io/hram/radar/index.html
+    hide_icon: false # set to true to hide the external link icon - defaults to false
+    opens_in_new_tab: true # set to true to open this link in a new tab - defaults to false

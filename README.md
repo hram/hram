@@ -5,4 +5,4 @@
 
 ### Оглавление
 1. [Резюме](https://hram.github.io/hram/docs/resume.html)
-2. [Тех радар](https://hram.github.io/hram/radar/index.html)
+2. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
