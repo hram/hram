@@ -9,7 +9,7 @@ nav_order: 2
 
 Опыт работы 22 года 5 месяцев
 
-{: .new }
+{: .highlight }
 В активном поиске новой работы
 
 [Написать мне в Telegram](https://t.me/hram0v){: .btn .btn-blue }
