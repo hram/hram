@@ -2,7 +2,8 @@ name: Храмов Евгений
 title: null
 theme: just-the-docs
 
-url: https://hram.github.io/hram/
+url: https://hram.github.io
+baseurl: /hram
 
 callouts_level: quiet # or loud
 callouts:
