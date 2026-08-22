@@ -9,11 +9,3 @@
 3. [Карьерный фокус](https://hram.github.io/hram/docs/career-focus.html)
 4. [Impact и проекты](https://hram.github.io/hram/docs/impact.html)
 5. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
-
-## Локальная сборка
-
-```bash
-bundle install
-bundle exec jekyll build
-bundle exec jekyll serve
-```
