@@ -5,11 +5,60 @@ nav_order: 1
 permalink: /
 ---
 
-# Обо мне
-Добрый день!\
-Меня зовут Храмов Евгений. Я Android разработчик со стажем 12 лет.\
-С августа 2021 я работаю в [Hoff Tech](https://hofftech.ru/) на позиции Android Tech Lead.
+# Храмов Евгений
+{: .no_toc }
 
-### Оглавление
-1. [Резюме]({% link docs/resume.md %})
-2. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
+Android Tech Lead / Head of Mobile с 15+ годами в мобильной разработке и
+25 годами в программировании.
+
+Выстраиваю мобильную разработку как инженерную систему: команда, архитектура,
+CI/CD, релизы, качество, observability, внутренние платформы и процессы
+поставки. Сильнее всего полезен там, где мобильная разработка уже стала
+критичной для бизнеса и ее нужно масштабировать: перевести в in-house,
+стабилизировать, ускорить delivery или собрать мобильную платформу для
+нескольких команд.
+
+[Написать в Telegram](https://t.me/hram0v){: .btn .btn-blue }
+[LinkedIn](https://www.linkedin.com/in/hram0v/){: .btn }
+[GitHub](https://github.com/hram){: .btn }
+
+## Карьерный фокус
+{: .no_toc }
+
+Сейчас я рассматриваю роли на стыке mobile leadership, platform engineering и
+hands-on архитектуры:
+
+- **Head of Mobile** - построение мобильной компетенции, найм, процессы,
+  стандарты разработки, релизный цикл и развитие нескольких мобильных команд.
+- **Mobile Platform Lead** - внутренняя мобильная платформа, CI/CD, App Store,
+  feature toggle, hotfix delivery, observability и инструменты для команд.
+- **Lead Android Architect** - архитектура сложных Android-продуктов,
+  модернизация, Kotlin, KMP, Compose, тестируемость и техническое лидерство.
+- **Kotlin Solution Architect** - Kotlin/Ktor, BFF, интеграции, внутренние
+  сервисы и решения на едином Kotlin-стеке.
+
+## Ключевые результаты
+{: .no_toc }
+
+- Поднял Crash-free основного Android-продукта с ~60% до 99,8%.
+- Сократил сборку релиза с 2 дней до 20 минут.
+- Увеличил частоту поставки с одного релиза за несколько месяцев до одного
+  релиза каждые 2 недели.
+- Перевел Android-разработку от подрядчика в in-house и убрал мобильную
+  разработку из роли bottleneck.
+- Спроектировал BFF на Kotlin/Ktor как единую точку входа к 30+ микросервисам:
+  в отдельных сценариях число запросов снизилось в 7 раз, время ответа - в
+  10 раз, трафик каталога - в 100 раз.
+- Разработал корпоративный BFF-шаблон; на его основе другие команды создали
+  15 сервисов.
+- Спроектировал и реализовал внутренний App Store для корпоративных Android-
+  и Web-приложений на KMP.
+
+## Разделы
+{: .no_toc }
+
+1. [Резюме: Head of Mobile]({% link docs/resume.md %})
+2. [Резюме: Mobile Platform Lead]({% link docs/mobile-platform-lead.md %})
+3. [Карьерный фокус]({% link docs/career-focus.md %})
+4. [Impact и проекты]({% link docs/impact.md %})
+5. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
