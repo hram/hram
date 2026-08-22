@@ -1,6 +1,8 @@
 # Храмов Евгений
 
-Личный GitHub Pages сайт: резюме, карьерный фокус и tech radar.
+Android Tech Lead / Head of Mobile с 15+ годами в мобильной разработке.
+
+Личный GitHub Pages сайт: резюме, карьерный фокус, impact-кейсы и tech radar.
 
 ## Ссылки
 
