@@ -108,6 +108,16 @@
   .stack{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--mute);line-height:1.9}
   .stack b{color:var(--star);font-weight:500}
 
+  .ai-box{
+    margin:26px 0 0;border:1px solid var(--line);border-left:3px solid var(--ice);
+    border-radius:12px;background:rgba(127,212,255,.05);padding:18px 22px
+  }
+  .ai-box .h{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--ice);margin:0 0 8px
+  }
+  .ai-box p{margin:0;color:#C4CEE6;font-size:15px}
+
   .relevance{
     margin-top:44px;border:1px solid var(--line);border-left:3px solid var(--accent);
     border-radius:12px;background:rgba(180,155,255,.05);padding:22px 24px
@@ -160,9 +170,13 @@
     <li><b>Доменное моделирование:</b> стадии, пакеты и переходы формализованы и доведены до работающего продукта уровня внутреннего инструмента команды.</li>
     <li><b>Требования как вход для агента:</b> Clean Architecture соблюдена не случайно, а по отдельному документу требований к архитектуре — слои разделены и проверяемы.</li>
     <li><b>Контроль качества:</b> собственный чеклист ревью и процедура аудита как приёмка работы агента, 24 файла тестов с настроенным покрытием.</li>
-    <li><b>ИИ внутри продукта:</b> ревью merge request'ов встроено в саму панель отдельным сценарием с промптом — ИИ здесь не только инструмент разработки, но и функция инструмента.</li>
     <li><b>Работу с несколькими агентами:</b> проект вёлся разными CLI-агентами, под каждого — свой контекстный файл в репозитории.</li>
   </ul>
+
+  <div class="ai-box">
+    <p class="h">ИИ в продукте</p>
+    <p>Ревью merge request'ов встроено в саму панель отдельным сценарием с собственным промптом: замечания к изменениям приходят вместе с остальной картиной релиза, а не отдельным инструментом сбоку. ИИ здесь делает работу инженера, а не подсказывает пользователю.</p>
+  </div>
 
   <h2>Факты</h2>
   <div class="facts">

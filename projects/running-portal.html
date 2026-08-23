@@ -108,6 +108,16 @@
   .stack{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--mute);line-height:1.9}
   .stack b{color:var(--star);font-weight:500}
 
+  .ai-box{
+    margin:26px 0 0;border:1px solid var(--line);border-left:3px solid var(--ice);
+    border-radius:12px;background:rgba(127,212,255,.05);padding:18px 22px
+  }
+  .ai-box .h{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--ice);margin:0 0 8px
+  }
+  .ai-box p{margin:0;color:#C4CEE6;font-size:15px}
+
   .relevance{
     margin-top:44px;border:1px solid var(--line);border-left:3px solid var(--accent);
     border-radius:12px;background:rgba(111,227,196,.05);padding:22px 24px
@@ -162,6 +172,11 @@
     <li><b>Работу с недружелюбной интеграцией:</b> авторизация внешнего сервиса разобрана и доведена до полностью автономного режима — хранение состояния сессии, обновление при отказе, тихий повторный вход.</li>
     <li><b>Эксплуатацию:</b> контейнеризация, персистентный том, отдельный документ критериев готовности к проду.</li>
   </ul>
+
+  <div class="ai-box">
+    <p class="h">ИИ в продукте</p>
+    <p>Встроенный тренер интерпретирует тренировки: что показывают метрики формы, растёт ли результат и что делать дальше. Пользователь получает вывод, а не только графики, из которых его надо сделать самому.</p>
+  </div>
 
   <h2>Факты</h2>
   <div class="facts">
