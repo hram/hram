@@ -77,10 +77,23 @@
   .chip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
 
   /* ---- legend ---- */
-  .legend{
-    position:fixed;z-index:3;right:30px;top:28px;display:flex;flex-direction:column;gap:7px;
-    align-items:flex-end;pointer-events:none
+  .rail{
+    position:fixed;z-index:3;right:30px;top:28px;display:flex;flex-direction:column;
+    gap:18px;align-items:flex-end
   }
+  .legend{display:flex;flex-direction:column;gap:7px;align-items:flex-end;pointer-events:none}
+  /* статический список: настоящие ссылки в разметке — для поисковиков,
+     скринридеров и чтения без JS (граф строится скриптом) */
+  .allp{pointer-events:auto;font-family:"IBM Plex Mono",monospace;text-align:right}
+  .allp summary{
+    cursor:pointer;list-style:none;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--dim);transition:color .18s
+  }
+  .allp summary::-webkit-details-marker{display:none}
+  .allp summary:hover,.allp[open] summary{color:var(--ice)}
+  .allp ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .allp a{font-size:11.5px;color:var(--mute);text-decoration:none;transition:color .18s}
+  .allp a:hover,.allp a:focus-visible{color:var(--star)}
   .lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--mute);font-family:"IBM Plex Mono",monospace}
   .lg i{width:8px;height:8px;border-radius:50%;display:inline-block;box-shadow:0 0 8px currentColor}
 
@@ -145,6 +158,7 @@
 
   @media (max-width:720px){
     .head{padding:18px 18px 0}
+    .rail{right:14px;top:14px}
     .legend{display:none}
     .filters{left:14px;right:14px;bottom:14px;gap:6px}
     .chip{padding:5px 10px;font-size:11.5px}
@@ -159,6 +173,7 @@
     *{animation:none !important;transition:none !important}
   }
 </style>
+<script src="assets/analytics.js" defer></script>
 </head>
 <body>
 <canvas id="bg"></canvas>
@@ -169,7 +184,25 @@
   <p class="sub">Не демо, а рабочие продукты в ежедневном использовании. Метод — не единичный кейс, а повторяемый процесс с контролем качества.</p>
 </div>
 
-<div class="legend" id="legend"></div>
+<div class="rail">
+  <div class="legend" id="legend"></div>
+  <details class="allp">
+    <summary>Все проекты списком</summary>
+    <ul>
+        <li><a href="projects/meta-agent.html">meta-agent</a></li>
+        <li><a href="projects/family-messenger.html">family-messenger</a></li>
+        <li><a href="projects/impact-analysis.html">impact-analysis</a></li>
+        <li><a href="projects/gitlab-panel.html">gitlab-panel</a></li>
+        <li><a href="projects/doctor.html">doctor</a></li>
+        <li><a href="projects/running-portal.html">running-portal</a></li>
+        <li><a href="projects/orienteering.html">orienteering</a></li>
+        <li><a href="projects/ikus.html">ikus.pesc.ru</a></li>
+        <li><a href="projects/meters.html">meters</a></li>
+        <li><a href="projects/peterburgregiongaz.html">peterburgregiongaz</a></li>
+        <li><a href="projects/procboard.html">procboard</a></li>
+    </ul>
+  </details>
+</div>
 
 <div id="stage">
   <svg id="sky" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 600" role="img" aria-label="Интерактивная карта проектов">

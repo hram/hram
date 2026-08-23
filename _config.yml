@@ -5,6 +5,9 @@ theme: just-the-docs
 url: https://hram.github.io
 baseurl: /hram
 
+plugins:
+  - jekyll-sitemap
+
 # исходники постановок и эталонов — не для публичной витрины
 exclude:
   - prompts/
