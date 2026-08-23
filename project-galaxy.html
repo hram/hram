@@ -179,10 +179,10 @@
 <script src="assets/analytics.js" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Созвездие AI-проектов — Храмов Евгений">
-<meta property="og:description" content="Интерактивная карта 11 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
+<meta property="og:description" content="Интерактивная карта 12 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
 <meta property="og:url" content="https://hram.github.io/hram/project-galaxy.html">
 <link rel="canonical" href="https://hram.github.io/hram/project-galaxy.html">
-<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 11 систем, построенных с ИИ-агентами.">
+<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 12 систем, построенных с ИИ-агентами.">
 <meta property="og:image" content="https://hram.github.io/hram/assets/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -193,7 +193,7 @@
 
 <div class="head">
   <p class="eyebrow">Храмов Евгений · AI-native engineering</p>
-  <h1 class="thesis">11 систем, собранных через <b>ИИ-агентов</b>.</h1>
+  <h1 class="thesis">12 систем, собранных через <b>ИИ-агентов</b>.</h1>
   <p class="sub">Не демо, а рабочие продукты в ежедневном использовании. Метод — не единичный кейс, а повторяемый процесс с контролем качества.</p>
 </div>
 
@@ -213,6 +213,7 @@
         <li><a href="projects/meters.html">meters</a></li>
         <li><a href="projects/peterburgregiongaz.html">peterburgregiongaz</a></li>
         <li><a href="projects/procboard.html">procboard</a></li>
+        <li><a href="projects/github-hram.html">github-hram</a></li>
     </ul>
   </details>
 </div>
@@ -340,6 +341,14 @@ const P = [
          "Неинвазивный дизайн: управляемые сервисы не знают о панели"],
     facts:{"Код":"~630 строк Python","Статус":"systemd-сервис","Роль":"управляет остальными"},
     tags:["Автоматизация","Ежедневно","В эксплуатации"] },
+
+  { id:"github-hram", name:"github-hram", cat:"platform", x:370, y:105, loc:5041,
+    one:"Публичная AI-собранная витрина инженерных проектов: карта, страницы кейсов и карьерный контекст в одном продукте.",
+    dem:["Превращение результата в продукт: AI-кейсы получили навигацию, объяснение метода и публичный контекст",
+         "Краулабельность как требование: статические страницы, метаданные, JSON-LD и sitemap",
+         "Переиспользуемый формат: одна визуальная система связывает 12 самостоятельных проектов"],
+    facts:{"AI-версия":"1 день","Коммитов":"54","Файлов":"42 tracked","Статус":"GitHub Pages"},
+    tags:["Платформа","Метод","Прототип до кода","В эксплуатации"] },
 ];
 
 // meaningful constellation links only
@@ -352,6 +361,7 @@ const EDGES = [
   {a:"meta-agent", b:"running-portal", type:"forge"},
   {a:"meta-agent", b:"impact-analysis", type:"forge"},
   {a:"meta-agent", b:"procboard", type:"forge"},
+  {a:"meta-agent", b:"github-hram", type:"forge"},
   {a:"meta-agent", b:"doctor", type:"forge"},
   {a:"meta-agent", b:"ikus", type:"forge"},
 ];
