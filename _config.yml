@@ -13,6 +13,7 @@ exclude:
   - prompts/
   - Gemfile
   - Gemfile.lock
+  - radar/error.html # заглушка «PAGE NOT FOUND» из сборки радара — не страница сайта
 
 callouts_level: quiet # or loud
 callouts:
