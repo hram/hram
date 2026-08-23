@@ -22,6 +22,20 @@ CI/CD, релизы, качество, observability, внутренние пл�
 [LinkedIn](https://www.linkedin.com/in/hram0v/){: .btn }
 [GitHub](https://github.com/hram){: .btn }
 
+---
+
+## [Созвездие AI-проектов →]({{ '/project-galaxy.html' | relative_url }})
+{: .no_toc }
+
+Одиннадцать систем, построенных с ИИ-агентами за пять месяцев: интерактивная
+карта проектов, у каждого — отдельная страница с методом, метриками и следом
+AI-процесса. От собственной среды оркестрации агентов до кроссплатформенного
+мессенджера за 9 дней.
+
+[Открыть созвездие]({{ '/project-galaxy.html' | relative_url }}){: .btn .btn-purple }
+
+---
+
 ## Карьерный фокус
 {: .no_toc }
 
@@ -62,3 +76,4 @@ hands-on архитектуры:
 3. [Карьерный фокус]({% link docs/career-focus.md %})
 4. [Impact и проекты]({% link docs/impact.md %})
 5. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
+6. [Созвездие AI-проектов]({{ '/project-galaxy.html' | relative_url }})

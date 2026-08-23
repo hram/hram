@@ -5,6 +5,12 @@ theme: just-the-docs
 url: https://hram.github.io
 baseurl: /hram
 
+# исходники постановок и эталонов — не для публичной витрины
+exclude:
+  - prompts/
+  - Gemfile
+  - Gemfile.lock
+
 callouts_level: quiet # or loud
 callouts:
   highlight:
@@ -23,6 +29,10 @@ callouts:
     color: red
 
 nav_external_links:
+  - title: Созвездие AI-проектов
+    url: /project-galaxy.html
+    hide_icon: true # внутренняя страница сайта, а не внешний ресурс
+    opens_in_new_tab: false
   - title: Мой Tech Radar
     url: https://hram.github.io/hram/radar/index.html
     hide_icon: false # set to true to hide the external link icon - defaults to false
