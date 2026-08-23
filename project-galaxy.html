@@ -105,6 +105,9 @@
   }
   .node:hover .lbl,.node.sel .lbl{fill:var(--star)}
   .node.dim{opacity:.14;transition:opacity .35s;pointer-events:none}
+  /* «оживление» после загрузки: движение сообщает, что звёзды кликабельны */
+  .node.pulse{animation:np .85s cubic-bezier(.22,1,.36,1)}
+  @keyframes np{0%{transform:scale(1)}38%{transform:scale(1.2)}100%{transform:scale(1)}}
   .edge{stroke:var(--line);fill:none;transition:opacity .35s,stroke .2s}
   .edge.lineage{stroke:var(--ice);opacity:.55;stroke-width:1.4}
   .edge.forge{stroke:var(--gold);opacity:.22;stroke-dasharray:2 7;stroke-width:1.2}
@@ -559,6 +562,35 @@ function applyFilters(){
     e.classList.toggle("dim",active && !on);
   });
 }
+
+// ---------- показать, что звёзды кликабельны ----------
+// статичный граф читается как картинка; короткая волна от ядра наружу
+// сообщает об интерактивности быстрее, чем текстовая подсказка
+(function(){
+  if(reduce) return;                       // при prefers-reduced-motion — тишина
+  var touched=false;
+  ["pointerdown","keydown","wheel"].forEach(function(ev){
+    addEventListener(ev,function(){ touched=true; },{once:true,passive:true});
+  });
+  var order=P.slice().sort(function(a,b){
+    return Math.hypot(a.x-500,a.y-300)-Math.hypot(b.x-500,b.y-300);
+  });
+  function wave(){
+    if(touched) return;
+    order.forEach(function(p,i){
+      setTimeout(function(){
+        var g=document.querySelector('.node[data-id="'+p.id+'"]');
+        if(!g||touched) return;
+        g.style.transition=""; g.style.transform="";   // инлайн от анимации появления перебил бы пульс
+        g.style.transformOrigin=p.x+"px "+p.y+"px";
+        g.classList.add("pulse");
+        setTimeout(function(){ g.classList.remove("pulse"); },900);
+      }, i*80);
+    });
+  }
+  setTimeout(wave,1900);                   // после того, как узлы зажглись
+  setTimeout(wave,8000);                   // второй раз — если так и не тронули
+})();
 
 // ---------- legend ----------
 const lg=document.getElementById("legend");
