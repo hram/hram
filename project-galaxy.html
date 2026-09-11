@@ -179,10 +179,10 @@
 <script src="assets/analytics.js" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Созвездие AI-проектов — Храмов Евгений">
-<meta property="og:description" content="Интерактивная карта 12 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
+<meta property="og:description" content="Интерактивная карта 13 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
 <meta property="og:url" content="https://hram.github.io/hram/project-galaxy.html">
 <link rel="canonical" href="https://hram.github.io/hram/project-galaxy.html">
-<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 12 систем, построенных с ИИ-агентами.">
+<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 13 систем, построенных с ИИ-агентами.">
 <meta property="og:image" content="https://hram.github.io/hram/assets/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -193,7 +193,7 @@
 
 <div class="head">
   <p class="eyebrow">Храмов Евгений · AI-native engineering</p>
-  <h1 class="thesis">12 систем, собранных через <b>ИИ-агентов</b>.</h1>
+  <h1 class="thesis">13 систем, собранных через <b>ИИ-агентов</b>.</h1>
   <p class="sub">Не демо, а рабочие продукты в ежедневном использовании. Метод — не единичный кейс, а повторяемый процесс с контролем качества.</p>
 </div>
 
@@ -214,6 +214,7 @@
         <li><a href="projects/peterburgregiongaz.html">peterburgregiongaz</a></li>
         <li><a href="projects/procboard.html">procboard</a></li>
         <li><a href="projects/github-hram.html">github-hram</a></li>
+        <li><a href="projects/android-ui-renderer-mcp.html">android-ui-renderer-mcp</a></li>
     </ul>
   </details>
 </div>
@@ -349,6 +350,14 @@ const P = [
          "Переиспользуемый формат: одна визуальная система связывает 12 самостоятельных проектов"],
     facts:{"AI-версия":"1 день","Коммитов":"54","Файлов":"42 tracked","Статус":"GitHub Pages"},
     tags:["Платформа","Метод","Прототип до кода","В эксплуатации"] },
+
+  { id:"android-ui-renderer-mcp", name:"android-ui-renderer-mcp", cat:"quality", x:100, y:500, loc:1000,
+    one:"MCP-сервер для быстрого рендера Android XML-интерфейсов и проверки геометрии без эмулятора.",
+    dem:["Скорость обратной связи: агент получает PNG и View Tree после изменения layout",
+         "Проверяемость: точные bounds, состояния View и renderId для повторной инспекции",
+         "Инженерная осторожность: Robolectric worker перезапускается при изменении исходников"],
+    facts:{"Разработка":"1 день · MVP","Коммитов":"9","Код":"~1 000 строк Kotlin","Тесты":"3 набора"},
+    tags:["Kotlin","MCP","Контроль качества","Android"] },
 ];
 
 // meaningful constellation links only
@@ -364,6 +373,7 @@ const EDGES = [
   {a:"meta-agent", b:"github-hram", type:"forge"},
   {a:"meta-agent", b:"doctor", type:"forge"},
   {a:"meta-agent", b:"ikus", type:"forge"},
+  {a:"meta-agent", b:"android-ui-renderer-mcp", type:"forge"},
 ];
 
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
