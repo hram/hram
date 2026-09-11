@@ -179,10 +179,10 @@
 <script src="assets/analytics.js" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Созвездие AI-проектов — Храмов Евгений">
-<meta property="og:description" content="Интерактивная карта 14 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
+<meta property="og:description" content="Интерактивная карта 15 систем, построенных с ИИ-агентами: метод, метрики и след AI-процесса.">
 <meta property="og:url" content="https://hram.github.io/hram/project-galaxy.html">
 <link rel="canonical" href="https://hram.github.io/hram/project-galaxy.html">
-<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 14 систем, построенных с ИИ-агентами.">
+<meta name="description" content="Созвездие AI-проектов Евгения Храмова: интерактивная карта 15 систем, построенных с ИИ-агентами.">
 <meta property="og:image" content="https://hram.github.io/hram/assets/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -193,7 +193,7 @@
 
 <div class="head">
   <p class="eyebrow">Храмов Евгений · AI-native engineering</p>
-  <h1 class="thesis">14 систем, собранных через <b>ИИ-агентов</b>.</h1>
+  <h1 class="thesis">15 систем, собранных через <b>ИИ-агентов</b>.</h1>
   <p class="sub">Не демо, а рабочие продукты в ежедневном использовании. Метод — не единичный кейс, а повторяемый процесс с контролем качества.</p>
 </div>
 
@@ -216,6 +216,7 @@
         <li><a href="projects/github-hram.html">github-hram</a></li>
         <li><a href="projects/android-ui-renderer-mcp.html">android-ui-renderer-mcp</a></li>
         <li><a href="projects/allure-testops-mcp.html">allure-testops-mcp</a></li>
+        <li><a href="projects/career-portal.html">career-portal</a></li>
     </ul>
   </details>
 </div>
@@ -367,6 +368,15 @@ const P = [
          "Аудируемость: ответы инструментов можно сохранять в timestamped JSON-артефакты"],
     facts:{"Разработка":"1 день · MVP","Коммитов":"1","Код":"~1 392 строки JS","Тесты":"2 файла"},
     tags:["JavaScript","MCP","Контроль качества","Allure TestOps"] },
+
+  { id:"career-portal", name:"career-portal", cat:"platform", x:500, y:60, loc:6212,
+    one:"Личный карьерный портал: база знаний, вакансии и генерация резюме с помощью ИИ для двух пользователей.",
+    dem:["Продуктовое мышление: карьерные данные собраны в живую базу, а не в один неизменяемый файл",
+         "Переиспользование: одна база знаний превращается в резюме под разные роли и вакансии",
+         "Реальная эксплуатация: 7 мест работ и 24 проекта автора, 5 мест работ супруги"],
+    facts:{"Разработка":"активно","Коммитов":"26","Код":"~6 200 строк Python","Пользователи":"2"},
+    ai:"ИИ проверяет полноту базы, задаёт уточняющие вопросы, разбирает загруженные резюме и собирает версию под конкретную вакансию.",
+    tags:["FastAPI","ИИ в продукте","Платформа","Ежедневно"] },
 ];
 
 // meaningful constellation links only
@@ -384,6 +394,7 @@ const EDGES = [
   {a:"meta-agent", b:"ikus", type:"forge"},
   {a:"meta-agent", b:"android-ui-renderer-mcp", type:"forge"},
   {a:"meta-agent", b:"allure-testops-mcp", type:"forge"},
+  {a:"meta-agent", b:"career-portal", type:"forge"},
 ];
 
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
