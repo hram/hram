@@ -99,16 +99,19 @@
 
   /* ---- node visuals ---- */
   .node{cursor:pointer}
+  /* плавный reflow: раскладка пересчитывается под экран (см. скрипт), а не жёстко задана —
+     transition на геометрию сглаживает переход между пересчётами (ресайз, догрузка шрифта) */
+  .node circle{transition:cx .45s ease, cy .45s ease}
   .node .lbl{
     font-family:"IBM Plex Mono",monospace;font-size:12px;fill:var(--mute);
-    text-anchor:middle;transition:fill .2s, opacity .2s;pointer-events:none
+    text-anchor:middle;transition:fill .2s, opacity .2s, x .45s ease, y .45s ease;pointer-events:none
   }
   .node:hover .lbl,.node.sel .lbl{fill:var(--star)}
   .node.dim{opacity:.14;transition:opacity .35s;pointer-events:none}
   /* «оживление» после загрузки: движение сообщает, что звёзды кликабельны */
   .node.pulse{animation:np .85s cubic-bezier(.22,1,.36,1)}
   @keyframes np{0%{transform:scale(1)}38%{transform:scale(1.2)}100%{transform:scale(1)}}
-  .edge{stroke:var(--line);fill:none;transition:opacity .35s,stroke .2s}
+  .edge{stroke:var(--line);fill:none;transition:opacity .35s,stroke .2s,x1 .45s ease,y1 .45s ease,x2 .45s ease,y2 .45s ease}
   .edge.lineage{stroke:var(--ice);opacity:.55;stroke-width:1.4}
   .edge.forge{stroke:var(--gold);opacity:.22;stroke-dasharray:2 7;stroke-width:1.2}
   .edge.dim{opacity:.06}
@@ -240,6 +243,11 @@
   <div id="pbody"></div>
 </aside>
 
+<!-- Раскладка созвездия считается на клиенте (d3-force) под экран пользователя —
+     без зашитых координат. Самостоятельно захостенная сборка
+     d3-quadtree + d3-dispatch + d3-timer + d3-force, лицензия —
+     assets/vendor/d3-force.LICENSE.txt -->
+<script src="assets/vendor/d3-force.min.js"></script>
 <script>
 "use strict";
 
@@ -254,7 +262,7 @@ const CAT = {
 };
 
 const P = [
-  { id:"meta-agent", name:"meta-agent", cat:"core", x:500, y:300, loc:47300,
+  { id:"meta-agent", name:"meta-agent", cat:"core", loc:47300,
     one:"Собственная среда оркестрации ИИ-агентов, в которой построены все остальные проекты.",
     dem:["Системное мышление: пространства → сессии → пайплайны, а не «попросил код»",
          "Качество результата агента = качество контекста и инструментов — и я это построил",
@@ -262,7 +270,7 @@ const P = [
     facts:{"Разработка":"4.5 мес · активно","Коммитов":"82","Код":"~47 300 строк JS","Тесты":"31 набор"},
     tags:["Метод","Прототип до кода","Интеграции","В эксплуатации"] },
 
-  { id:"family-messenger", name:"family-messenger", cat:"wow", x:796, y:274, loc:15800,
+  { id:"family-messenger", name:"family-messenger", cat:"wow", loc:15800,
     one:"Кроссплатформенный мессенджер на KMP за 9 дней — Android, iOS, Desktop и Web из одного кода.",
     dem:["Скорость: то, что командой делают кварталами — за девять дней",
          "shared-contract как защита от рассинхрона между пятью таргетами",
@@ -270,7 +278,7 @@ const P = [
     facts:{"Разработка":"9 дней","Коммитов":"63","Код":"~15 800 строк Kotlin","Статус":"задеплоен, используется"},
     tags:["Kotlin / KMP","Прототип до кода","В эксплуатации","Ежедневно"] },
 
-  { id:"impact-analysis", name:"impact-analysis", cat:"quality", x:732, y:391, loc:3100,
+  { id:"impact-analysis", name:"impact-analysis", cat:"quality", loc:3100,
     one:"Kotlin CLI, который по diff'у вычисляет, какие UI-тесты реально нужно прогнать.",
     dem:["Методология, а не везение: этапная приёмка по фактическим цифрам",
          "Декомпозиция задачи так, чтобы агент не терялся на чужой большой кодовой базе",
@@ -278,7 +286,7 @@ const P = [
     facts:{"Разработка":"5 дней","Коммитов":"16","Код":"~3 100 строк Kotlin","Проверено на":"реальном Android-проекте"},
     tags:["Kotlin / KMP","Контроль качества","Интеграции"] },
 
-  { id:"gitlab-panel", name:"gitlab-panel", cat:"quality", x:627, y:392, loc:14200,
+  { id:"gitlab-panel", name:"gitlab-panel", cat:"quality", loc:14200,
     one:"Панель прозрачности релизов: что дошло до прода и что потерялось между стадиями.",
     dem:["Доменное моделирование стадий, пакетов и переходов доведено до продукта",
          "Clean Architecture как входное ТЗ агенту — соблюдена не случайно, а по документу",
@@ -287,7 +295,7 @@ const P = [
     ai:"Ревьюит merge request'ы прямо в панели: отдельный сценарий с собственным промптом, замечания приходят вместе с остальной картиной релиза.",
     tags:["FastAPI","ИИ в продукте","Контроль качества","Интеграции","В эксплуатации"] },
 
-  { id:"doctor", name:"doctor", cat:"quality", x:526, y:404, loc:2750,
+  { id:"doctor", name:"doctor", cat:"quality", loc:2750,
     one:"Источник-независимое хранилище семейных данных с единой хронологией и ИИ-разбором документов.",
     dem:["Архитектурная дальновидность: «всеядное ядро» спроектировано до второго источника",
          "Жёсткие рамки качества агенту: mypy strict + ruff — и код в них укладывается",
@@ -296,7 +304,7 @@ const P = [
     ai:"Распознаёт документы в структурированные записи: из присланного файла — готовые поля и показатели, без ручного ввода.",
     tags:["FastAPI","Контроль качества","ИИ в продукте"] },
 
-  { id:"running-portal", name:"running-portal", cat:"platform", x:415, y:377, loc:11000,
+  { id:"running-portal", name:"running-portal", cat:"platform", loc:11000,
     one:"Портал беговой аналитики с ИИ-тренером и полностью автономным синком данных трекера.",
     dem:["Продуктовое мышление: фичи выстроены как последовательность вопросов пользователя",
          "Дизайн-макет отдельным шагом до реализации, а не «как получится»",
@@ -305,7 +313,7 @@ const P = [
     ai:"Тренер интерпретирует тренировки: что показывают метрики формы, растёт ли результат и что делать дальше.",
     tags:["FastAPI","ИИ в продукте","Прототип до кода","Ежедневно","В эксплуатации"] },
 
-  { id:"orienteering", name:"orienteering", cat:"platform", x:468, y:475, loc:18400,
+  { id:"orienteering", name:"orienteering", cat:"platform", loc:18400,
     one:"Разбор стартов по ориентированию: геопривязка карт, плеер трека, сплиты по КП.",
     dem:["Ведение агента через нетривиальную предметную математику (геопривязка, Jenks)",
          "Переиспользование архитектуры running-portal — зрелый инженерный приём",
@@ -314,7 +322,7 @@ const P = [
     ai:"Тренер разбирает ошибки на сплитах: где и почему потеряно время на перегоне и как это исправить.",
     tags:["FastAPI","ИИ в продукте","Шаблон → переиспользование","Прототип до кода","В эксплуатации"] },
 
-  { id:"ikus", name:"ikus.pesc.ru", cat:"automation", x:328, y:334, loc:970,
+  { id:"ikus", name:"ikus.pesc.ru", cat:"automation", loc:970,
     one:"Автоподача показаний воды и электричества в личный кабинет — без участия человека.",
     dem:["Автоматизация до состояния «человек не участвует», а не «удобная кнопка»",
          "Реверс авторизации с TOTP-верификацией",
@@ -322,7 +330,7 @@ const P = [
     facts:{"Разработка":"4 дня","Код":"~970 строк Python","Статус":"круглосуточно"},
     tags:["FastAPI","Автоматизация","Интеграции","В эксплуатации"] },
 
-  { id:"meters", name:"meters", cat:"automation", x:191, y:349, loc:900,
+  { id:"meters", name:"meters", cat:"automation", loc:900,
     one:"Агрегатор «семейства счётчиков»: вода, газ, электричество — один экран, одна кнопка.",
     dem:["Системное мышление: два источника + агрегатор, источники подменяемы через конфиг",
          "Размножение решения: один отработанный шаблон → три сервиса за 4 дня",
@@ -330,7 +338,7 @@ const P = [
     facts:{"Разработка":"3 сервиса / 4 дня","Код":"~900 строк Python","Статус":"главный экран"},
     tags:["FastAPI","Автоматизация","Шаблон → переиспользование","Ежедневно"] },
 
-  { id:"peterburgregiongaz", name:"peterburgregiongaz", cat:"automation", x:174, y:247, loc:820,
+  { id:"peterburgregiongaz", name:"peterburgregiongaz", cat:"automation", loc:820,
     one:"Тот же сценарий автоподачи, но для газового кабинета — второй экземпляр шаблона.",
     dem:["Переиспользование шаблона: при работе с ИИ шаблон дороже кода",
          "Изоляция поставщик-специфичной логики в отдельном адаптере",
@@ -338,7 +346,7 @@ const P = [
     facts:{"Разработка":"4 дня · параллельно","Код":"~820 строк Python","Статус":"круглосуточно"},
     tags:["FastAPI","Автоматизация","Шаблон → переиспользование"] },
 
-  { id:"procboard", name:"procboard", cat:"ops", x:312, y:278, loc:630,
+  { id:"procboard", name:"procboard", cat:"ops", loc:630,
     one:"Мини-дашборд, из которого запускаются и мониторятся все остальные сервисы на сервере.",
     dem:["Чувство меры: 630 строк, без Kubernetes там, где хватает конфига",
          "Мышление уровня эксплуатации: healthcheck'и, автостарт, аптайм, логи",
@@ -346,7 +354,7 @@ const P = [
     facts:{"Код":"~630 строк Python","Статус":"systemd-сервис","Роль":"управляет остальными"},
     tags:["Автоматизация","Ежедневно","В эксплуатации"] },
 
-  { id:"github-hram", name:"github-hram", cat:"platform", x:354, y:207, loc:5041,
+  { id:"github-hram", name:"github-hram", cat:"platform", loc:5041,
     one:"Публичная AI-собранная витрина инженерных проектов: карта, страницы кейсов и карьерный контекст в одном продукте.",
     dem:["Превращение результата в продукт: AI-кейсы получили навигацию, объяснение метода и публичный контекст",
          "Краулабельность как требование: статические страницы, метаданные, JSON-LD и sitemap",
@@ -354,7 +362,7 @@ const P = [
     facts:{"AI-версия":"1 день","Коммитов":"54","Файлов":"42 tracked","Статус":"GitHub Pages"},
     tags:["Платформа","Метод","Прототип до кода","В эксплуатации"] },
 
-  { id:"android-ui-renderer-mcp", name:"android-ui-renderer-mcp", cat:"quality", x:482, y:174, loc:1000,
+  { id:"android-ui-renderer-mcp", name:"android-ui-renderer-mcp", cat:"quality", loc:1000,
     one:"MCP-сервер для быстрого рендера Android XML-интерфейсов и проверки геометрии без эмулятора.",
     dem:["Скорость обратной связи: агент получает PNG и View Tree после изменения layout",
          "Проверяемость: точные bounds, состояния View и renderId для повторной инспекции",
@@ -362,7 +370,7 @@ const P = [
     facts:{"Разработка":"1 день · MVP","Коммитов":"9","Код":"~1 000 строк Kotlin","Тесты":"3 набора"},
     tags:["Kotlin","MCP","Контроль качества","Android"] },
 
-  { id:"allure-testops-mcp", name:"allure-testops-mcp", cat:"quality", x:636, y:149, loc:1392,
+  { id:"allure-testops-mcp", name:"allure-testops-mcp", cat:"quality", loc:1392,
     one:"MCP-сервер для управления тест-кейсами, сценариями и связями в Allure TestOps из AI-агента.",
     dem:["Интеграционная полнота: поиск, CRUD тест-кейсов, сценарии, issue-связи и custom fields",
          "Безопасная автоматизация: API-ошибки нормализуются, токен обменивается и кэшируется",
@@ -370,7 +378,7 @@ const P = [
     facts:{"Разработка":"1 день · MVP","Коммитов":"1","Код":"~1 392 строки JS","Тесты":"2 файла"},
     tags:["JavaScript","MCP","Контроль качества","Allure TestOps"] },
 
-  { id:"career-portal", name:"career-portal", cat:"platform", x:675, y:277, loc:6212,
+  { id:"career-portal", name:"career-portal", cat:"platform", loc:6212,
     one:"Личный карьерный портал: база знаний, вакансии и генерация резюме с помощью ИИ для двух пользователей.",
     dem:["Продуктовое мышление: карьерные данные собраны в живую базу, а не в один неизменяемый файл",
          "Переиспользование: одна база знаний превращается в резюме под разные роли и вакансии",
@@ -379,7 +387,7 @@ const P = [
     ai:"ИИ проверяет полноту базы, задаёт уточняющие вопросы, разбирает загруженные резюме и собирает версию под конкретную вакансию.",
     tags:["FastAPI","ИИ в продукте","Платформа","Ежедневно"] },
 
-  { id:"gdebenz", name:"gdebenz", cat:"automation", x:781, y:170, loc:2742,
+  { id:"gdebenz", name:"gdebenz", cat:"automation", loc:2742,
     one:"Личный портал «ехать за АИ-95 или ждать»: агрегирует данные избранных АЗС в одно объяснимое решение.",
     dem:["Продуктовое мышление: сырые статусы АЗС превращены в одно решение с причиной",
          "Работа с ненадёжным источником: явные правила доверия агрегату против одиночной отметки",
@@ -419,21 +427,34 @@ function catColor(cat){ return getComputedStyle(document.documentElement).getPro
 const NS="http://www.w3.org/2000/svg";
 const gEdges=document.getElementById("edges");
 const gNodes=document.getElementById("nodes");
+const svg=document.getElementById("sky");
 
-// ---- edges ----
+// ---- размер узла + реальная ширина подписи (не оценка по числу символов —
+// измеряем фактический рендер шрифта, чтобы граница созвездия точно не резала текст) ----
+const measureCtx=document.createElement("canvas").getContext("2d");
+function labelHalfWidth(name){
+  measureCtx.font="500 12px 'IBM Plex Mono', ui-monospace, monospace";
+  return measureCtx.measureText(name).width/2;
+}
+P.forEach(p=>{
+  p.r=radius(p.loc);
+  p.haloR=p.r*2.7;                                   // внешний ореол узла
+  p.halfW=Math.max(p.haloR, labelHalfWidth(p.name)+4); // половина ширины «занятого» места
+  p.topExt=p.haloR+4;                                  // запас сверху
+  p.botExt=p.r+17+9;                                   // подпись под узлом + строка текста
+});
+
+// ---- построение DOM один раз; позиции проставляются раскладкой ниже ----
+const els={};
 EDGES.forEach(e=>{
-  const a=byId[e.a], b=byId[e.b];
   const l=document.createElementNS(NS,"line");
-  l.setAttribute("x1",a.x); l.setAttribute("y1",a.y);
-  l.setAttribute("x2",b.x); l.setAttribute("y2",b.y);
   l.setAttribute("class","edge "+e.type);
   l.dataset.a=e.a; l.dataset.b=e.b;
   gEdges.appendChild(l);
+  e.el=l;
 });
 
-// ---- nodes ----
-P.forEach((p,i)=>{
-  const r=radius(p.loc);
+P.forEach(p=>{
   const col=catColor(p.cat);
   const g=document.createElementNS(NS,"g");
   g.setAttribute("class","node"); g.setAttribute("tabindex","0");
@@ -441,55 +462,32 @@ P.forEach((p,i)=>{
   g.setAttribute("aria-label",p.name+" — "+p.one);
   g.dataset.id=p.id;
 
-  // glow layers
   const glow=document.createElementNS(NS,"circle");
-  glow.setAttribute("cx",p.x); glow.setAttribute("cy",p.y);
-  glow.setAttribute("r",r*2.7); glow.setAttribute("fill",col); glow.setAttribute("opacity",".13");
+  glow.setAttribute("r",p.haloR); glow.setAttribute("fill",col); glow.setAttribute("opacity",".13");
   const halo=document.createElementNS(NS,"circle");
-  halo.setAttribute("cx",p.x); halo.setAttribute("cy",p.y);
-  halo.setAttribute("r",r*1.6); halo.setAttribute("fill",col); halo.setAttribute("opacity",".26");
+  halo.setAttribute("r",p.r*1.6); halo.setAttribute("fill",col); halo.setAttribute("opacity",".26");
   halo.setAttribute("class","halo");
   const core=document.createElementNS(NS,"circle");
-  core.setAttribute("cx",p.x); core.setAttribute("cy",p.y);
-  core.setAttribute("r",r); core.setAttribute("fill", p.cat==="core"?col:"var(--star)");
+  core.setAttribute("r",p.r); core.setAttribute("fill", p.cat==="core"?col:"var(--star)");
   core.setAttribute("stroke",col); core.setAttribute("stroke-width", p.cat==="core"?0:1.4);
 
-  // orbital rings for the core (the foundry)
+  const rings=[];
   if(p.cat==="core"){
-    [r*2.1, r*2.9].forEach((rr,idx)=>{
+    [p.r*2.1, p.r*2.9].forEach((rr,idx)=>{
       const ring=document.createElementNS(NS,"circle");
-      ring.setAttribute("cx",p.x); ring.setAttribute("cy",p.y); ring.setAttribute("r",rr);
+      ring.setAttribute("r",rr);
       ring.setAttribute("fill","none"); ring.setAttribute("stroke",col);
       ring.setAttribute("stroke-width","1"); ring.setAttribute("opacity",idx?".12":".2");
-      g.appendChild(ring);
+      g.appendChild(ring); rings.push(ring);
     });
   }
 
   const lbl=document.createElementNS(NS,"text");
-  lbl.setAttribute("x",p.x); lbl.setAttribute("y",p.y + r + 17);
   lbl.setAttribute("class","lbl"); lbl.textContent=p.name;
 
   g.appendChild(glow); g.appendChild(halo); g.appendChild(core); g.appendChild(lbl);
   gNodes.appendChild(g);
-
-  // load ignition (staggered from the core outward)
-  if(!reduce){
-    g.style.opacity="0";
-    g.style.transform="scale(.4)";
-    g.style.transformOrigin=p.x+"px "+p.y+"px";
-    g.style.transition="opacity .6s ease, transform .6s cubic-bezier(.22,1.2,.36,1)";
-    const d=Math.hypot(p.x-500,p.y-300);
-    setTimeout(()=>{ g.style.opacity="1"; g.style.transform="scale(1)"; }, 260 + d*1.4);
-    // по окончании появления снимаем инлайновые стили: иначе style="opacity:1"
-    // перебивает класс .node.dim и фильтр визуально ничего не делает
-    g.addEventListener("transitionend",function done(ev){
-      if(ev.target!==g || ev.propertyName!=="opacity") return;
-      g.style.opacity=""; g.style.transform=""; g.style.transition="";
-      g.removeEventListener("transitionend",done);
-    });
-    // twinkle
-    halo.style.animation=`tw ${3+Math.random()*3}s ease-in-out ${Math.random()*3}s infinite`;
-  }
+  els[p.id]={g,glow,halo,core,lbl,rings};
 
   g.addEventListener("click",()=>select(p.id));
   g.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();select(p.id);} });
@@ -497,36 +495,148 @@ P.forEach((p,i)=>{
   g.addEventListener("mouseleave",()=>hover(p.id,false));
 });
 
-// ---------- fit: центрируем созвездие целиком, а не ядро ----------
-// viewBox подгоняется под bbox всех узлов (с учётом радиусов и подписей),
-// центр bbox совмещается с центром свободной области между шапкой и фильтрами.
-function fitView(){
-  const svg=document.getElementById("sky");
-  const narrow = innerWidth<=720;
-  const HEAD = narrow?132:186;   // шапка с тезисом
-  const FOOT = narrow?86:74;     // строка фильтров
-  const SIDE = narrow?14:30;
-
-  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+function applyPositions(){
   P.forEach(p=>{
-    const r=radius(p.loc)*2.6;              // узел вместе с ореолом
-    const half=Math.max(r, p.name.length*3.7+6);  // подпись шире мелких узлов
-    x0=Math.min(x0,p.x-half); x1=Math.max(x1,p.x+half);
-    y0=Math.min(y0,p.y-r);    y1=Math.max(y1,p.y+radius(p.loc)+24); // +подпись снизу
+    const e=els[p.id];
+    e.glow.setAttribute("cx",p.x); e.glow.setAttribute("cy",p.y);
+    e.halo.setAttribute("cx",p.x); e.halo.setAttribute("cy",p.y);
+    e.core.setAttribute("cx",p.x); e.core.setAttribute("cy",p.y);
+    e.rings.forEach(r=>{ r.setAttribute("cx",p.x); r.setAttribute("cy",p.y); });
+    e.lbl.setAttribute("x",p.x); e.lbl.setAttribute("y",p.y+p.r+17);
+    e.g.style.transformOrigin=p.x+"px "+p.y+"px";
   });
-  const bw=Math.max(1,x1-x0), bh=Math.max(1,y1-y0);
-  const vw=innerWidth, vh=innerHeight;
-
-  // масштаб, при котором bbox влезает в область за вычетом хрома (с зазором)
-  const s=Math.min((vw-2*SIDE)/bw, (vh-HEAD-FOOT)/bh)*0.94;
-  // центр свободной области в пикселях
-  const cx=vw/2, cy=(HEAD + (vh-FOOT))/2;
-  // viewBox покрывает весь экран, поэтому meet не добавляет своих полей
-  svg.setAttribute("viewBox",
-    ((x0+bw/2) - cx/s) + " " + ((y0+bh/2) - cy/s) + " " + (vw/s) + " " + (vh/s));
+  EDGES.forEach(e=>{
+    const a=byId[e.a], b=byId[e.b];
+    e.el.setAttribute("x1",a.x); e.el.setAttribute("y1",a.y);
+    e.el.setAttribute("x2",b.x); e.el.setAttribute("y2",b.y);
+  });
 }
-fitView();
-addEventListener("resize",fitView);
+
+// ---------- динамическая раскладка под экран пользователя (d3-force) ----------
+// Координаты нигде не зашиты: при каждом запуске считаем свободную область
+// экрана (за вычетом шапки/фильтров/боковых полей — «других областей страницы»)
+// и раскладываем граф внутри неё физической симуляцией, meta-agent — в центре.
+function safeRect(){
+  const narrow=innerWidth<=720;
+  const HEAD=narrow?132:186;   // шапка с тезисом
+  const FOOT=narrow?86:74;     // строка фильтров
+  const SIDE=narrow?14:30;
+  return { x0:SIDE, y0:HEAD, x1:Math.max(SIDE+120,innerWidth-SIDE), y1:Math.max(HEAD+120,innerHeight-FOOT) };
+}
+
+// Жёсткая граница безопасной области. Важно: d3 применяет силы как приращение
+// скорости и лишь ПОСЛЕ этого сдвигает x/y на неё — если здесь только
+// подправить x/y, на следующем шаге интеграции узел снова вытолкнет той же
+// vx/vy обратно за край. Поэтому вместе с позицией гасим и «уходящую наружу»
+// составляющую скорости — иначе на тесных экранах узлы вылезали за границы.
+function boundsForce(rect){
+  let nodes;
+  function force(){
+    for(const p of nodes){
+      const lo=rect.x0+p.halfW, hi=rect.x1-p.halfW;
+      if(p.x<lo){ p.x=lo; if(p.vx<0) p.vx=0; }
+      else if(p.x>hi){ p.x=hi; if(p.vx>0) p.vx=0; }
+      const top=rect.y0+p.topExt, bot=rect.y1-p.botExt;
+      if(p.y<top){ p.y=top; if(p.vy<0) p.vy=0; }
+      else if(p.y>bot){ p.y=bot; if(p.vy>0) p.vy=0; }
+    }
+  }
+  force.initialize=n=>{ nodes=n; };
+  return force;
+}
+
+function runLayout(){
+  const rect=safeRect();
+  const cx=(rect.x0+rect.x1)/2, cy=(rect.y0+rect.y1)/2;
+  const span=Math.min(rect.x1-rect.x0, rect.y1-rect.y0);
+  const meta=byId["meta-agent"];
+
+  // сид: держим текущие позиции (плавный переход при ресайзе), а для первого
+  // запуска раскладываем узлы по кругу вокруг будущего центра meta-agent
+  const others=P.filter(p=>p.id!=="meta-agent");
+  others.forEach((p,i)=>{
+    if(typeof p.x==="number") return;
+    const a=(i/others.length)*Math.PI*2;
+    p.x=cx+Math.cos(a)*span*0.28; p.y=cy+Math.sin(a)*span*0.28;
+  });
+  meta.x=cx; meta.y=cy; meta.fx=cx; meta.fy=cy;
+
+  const links=EDGES.map(e=>({source:e.a, target:e.b, type:e.type}));
+  const sim=d3.forceSimulation(P)
+    .force("charge", d3.forceManyBody().strength(-span*0.85))
+    .force("link", d3.forceLink(links).id(d=>d.id)
+      .distance(l=>span*(l.type==="forge"?0.24:0.17))
+      .strength(0.55))
+    .force("radial", d3.forceRadial(span*0.28, cx, cy).strength(0.1))
+    .force("collide", d3.forceCollide().radius(p=>p.halfW*1.05).strength(0.9).iterations(3))
+    .force("bounds", boundsForce(rect))
+    .stop();
+  for(let i=0;i<400;i++) sim.tick();
+
+  // финальный проход — только коллизии и границы, убирает остаточные наложения подписей
+  meta.fx=cx; meta.fy=cy;
+  const sim2=d3.forceSimulation(P)
+    .force("collide", d3.forceCollide().radius(p=>p.halfW*1.05+3).strength(1).iterations(3))
+    .force("bounds", boundsForce(rect))
+    .stop();
+  for(let i=0;i<300;i++) sim2.tick();
+
+  // финальный жёсткий clamp: гарантия «не наезжает на другие области страницы»
+  // не должна зависеть от порядка применения сил внутри símуляции (коллизии
+  // в тесном пространстве способны на пару кадров вытолкнуть узел за clamp
+  // из boundsForce ещё до следующей итерации) — здесь позиция подрезается
+  // окончательно и без исключений.
+  for(const p of P){
+    const lo=rect.x0+p.halfW, hi=rect.x1-p.halfW;
+    p.x=Math.min(Math.max(p.x,lo),hi);
+    const top=rect.y0+p.topExt, bot=rect.y1-p.botExt;
+    p.y=Math.min(Math.max(p.y,top),bot);
+  }
+
+  svg.setAttribute("viewBox","0 0 "+innerWidth+" "+innerHeight);
+  applyPositions();
+}
+
+// ---- ignition: волна появления от ядра наружу (только при первой раскладке) ----
+function startEntrance(){
+  if(reduce) return;
+  const meta=byId["meta-agent"];
+  P.forEach(p=>{
+    const {g,halo}=els[p.id];
+    g.style.opacity="0";
+    g.style.transform="scale(.4)";
+    g.style.transition="opacity .6s ease, transform .6s cubic-bezier(.22,1.2,.36,1)";
+    const d=Math.hypot(p.x-meta.x,p.y-meta.y);
+    setTimeout(()=>{ g.style.opacity="1"; g.style.transform="scale(1)"; }, 260+d*1.4);
+    // по окончании появления снимаем инлайновые стили: иначе style="opacity:1"
+    // перебивает класс .node.dim и фильтр визуально ничего не делает
+    g.addEventListener("transitionend",function done(ev){
+      if(ev.target!==g || ev.propertyName!=="opacity") return;
+      g.style.opacity=""; g.style.transform=""; g.style.transition="";
+      g.removeEventListener("transitionend",done);
+    });
+    halo.style.animation=`tw ${3+Math.random()*3}s ease-in-out ${Math.random()*3}s infinite`;
+  });
+}
+
+runLayout();
+startEntrance();
+
+// пересчёт при ресайзе (debounce, чтобы не гонять симуляцию на каждый пиксель)
+let resizeTimer=null;
+addEventListener("resize",()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(runLayout,180);
+});
+
+// догрузка веб-шрифта может слегка изменить реальную ширину подписей —
+// пересчитываем halfW точными метриками и один раз мягко доукладываем граф
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(()=>{
+    P.forEach(p=>{ p.halfW=Math.max(p.haloR, labelHalfWidth(p.name)+4); });
+    runLayout();
+  });
+}
 
 // twinkle keyframes
 const kf=document.createElement("style");
@@ -623,8 +733,9 @@ function applyFilters(){
   ["pointerdown","keydown","wheel"].forEach(function(ev){
     addEventListener(ev,function(){ touched=true; },{once:true,passive:true});
   });
+  var meta=byId["meta-agent"];
   var order=P.slice().sort(function(a,b){
-    return Math.hypot(a.x-500,a.y-300)-Math.hypot(b.x-500,b.y-300);
+    return Math.hypot(a.x-meta.x,a.y-meta.y)-Math.hypot(b.x-meta.x,b.y-meta.y);
   });
   function wave(){
     if(touched) return;
