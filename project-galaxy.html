@@ -636,7 +636,14 @@ function startEntrance(){
     g.style.transform="scale(.4)";
     g.style.transition="opacity .6s ease, transform .6s cubic-bezier(.22,1.2,.36,1)";
     const d=Math.hypot(p.x-meta.x,p.y-meta.y);
-    setTimeout(()=>{ g.style.opacity="1"; g.style.transform="scale(1)"; }, 260+d*1.4);
+    setTimeout(()=>{
+      // если фильтр уже оборвал intro (см. applyFilters) — g.style.transition
+      // пуст, это сигнал ничего не трогать: разбуженный по таймеру reveal
+      // не должен заново поставить style.opacity="1" поверх .node.dim
+      if(g.style.transition==="") return;
+      g.style.opacity = g.classList.contains("dim") ? "" : "1";
+      g.style.transform="scale(1)";
+    }, 260+d*1.4);
     // по окончании появления снимаем инлайновые стили: иначе style="opacity:1"
     // перебивает класс .node.dim и фильтр визуально ничего не делает
     g.addEventListener("transitionend",function done(ev){
@@ -734,6 +741,12 @@ allTags.forEach(t=>{
 function applyFilters(){
   const active=activeFilters.size>0;
   document.querySelectorAll(".node").forEach(n=>{
+    // Клик по фильтру обрывает ещё не доигравшую анимацию появления: пока она
+    // не закончилась, у узла инлайн style="opacity:1", который по специфичности
+    // перебивает класс .node.dim — фильтр тогда выглядит так, будто ничего не
+    // делает для узлов, «не успевших появиться». Взаимодействие с фильтром —
+    // явный сигнал, что decorative intro можно оборвать прямо сейчас.
+    n.style.opacity=""; n.style.transform=""; n.style.transition="";
     const p=byId[n.dataset.id];
     const match=!active || p.tags.some(t=>activeFilters.has(t));
     n.classList.toggle("dim",active && !match);
