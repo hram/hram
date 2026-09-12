@@ -718,9 +718,15 @@ const fbox=document.getElementById("filters");
 allTags.forEach(t=>{
   const c=document.createElement("button");
   c.className="chip"; c.setAttribute("aria-pressed","false"); c.textContent=t;
+  // Один активный тег за раз: клик заменяет предыдущий выбор, а не добавляет
+  // к нему по ИЛИ. При накоплении тегов по ИЛИ подсвеченное множество быстро
+  // «насыщалось» и после 2-3 разных тегов переставало заметно меняться —
+  // выглядело так, будто фильтр вообще не реагирует на выбор.
   c.addEventListener("click",()=>{
-    if(activeFilters.has(t)){activeFilters.delete(t);c.setAttribute("aria-pressed","false");}
-    else{activeFilters.add(t);c.setAttribute("aria-pressed","true");}
+    const wasActive=activeFilters.has(t);
+    activeFilters.clear();
+    fbox.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    if(!wasActive){ activeFilters.add(t); c.setAttribute("aria-pressed","true"); }
     applyFilters();
   });
   fbox.appendChild(c);
