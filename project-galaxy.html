@@ -516,12 +516,19 @@ function applyPositions(){
 // Координаты нигде не зашиты: при каждом запуске считаем свободную область
 // экрана (за вычетом шапки/фильтров/боковых полей — «других областей страницы»)
 // и раскладываем граф внутри неё физической симуляцией, meta-agent — в центре.
+// Границы меряются по факту (bounding rect шапки и строки фильтров), а не
+// константой на глаз: строка фильтров может занять одну или несколько строк
+// в зависимости от ширины окна и числа тегов — фиксированная высота либо
+// оставляла лишнее пустое место, либо не спасала от наезда на реальные чипы.
 function safeRect(){
   const narrow=innerWidth<=720;
-  const HEAD=narrow?132:186;   // шапка с тезисом
-  const FOOT=narrow?86:74;     // строка фильтров
   const SIDE=narrow?14:30;
-  return { x0:SIDE, y0:HEAD, x1:Math.max(SIDE+120,innerWidth-SIDE), y1:Math.max(HEAD+120,innerHeight-FOOT) };
+  const GAP=16; // зазор от реального края шапки/фильтров
+  const headBottom=document.querySelector(".head").getBoundingClientRect().bottom;
+  const filtTop=document.querySelector(".filters").getBoundingClientRect().top;
+  const y0=headBottom+GAP;
+  const y1=Math.max(y0+120, filtTop-GAP);
+  return { x0:SIDE, y0, x1:Math.max(SIDE+120,innerWidth-SIDE), y1 };
 }
 
 // Жёсткая граница безопасной области. Важно: d3 применяет силы как приращение
@@ -567,13 +574,35 @@ function runLayout(){
     .force("link", d3.forceLink(links).id(d=>d.id)
       .distance(l=>span*(l.type==="forge"?0.24:0.17))
       .strength(0.55))
-    .force("radial", d3.forceRadial(span*0.28, cx, cy).strength(0.1))
     .force("collide", d3.forceCollide().radius(p=>p.halfW*1.05).strength(0.9).iterations(3))
-    .force("bounds", boundsForce(rect))
     .stop();
   for(let i=0;i<400;i++) sim.tick();
 
-  // финальный проход — только коллизии и границы, убирает остаточные наложения подписей
+  // Растягиваем получившуюся форму (она у charge+link почти круглая) под
+  // фактическую прямоугольную безопасную область — иначе на широком экране
+  // созвездие остаётся кружком посередине, а сверху/снизу пусто. Тянем
+  // раздельно по четырём сторонам от meta-agent, чтобы учесть асимметрию
+  // подписи (она снизу от узла) и не полагаться на угадывание пропорций.
+  let reachL=1,reachR=1,reachU=1,reachD=1;
+  for(const p of others){
+    const dx=p.x-cx, dy=p.y-cy;
+    if(dx<0) reachL=Math.max(reachL,-dx+p.halfW); else reachR=Math.max(reachR,dx+p.halfW);
+    if(dy<0) reachU=Math.max(reachU,-dy+p.topExt); else reachD=Math.max(reachD,dy+p.botExt);
+  }
+  // верхнего предела нет: экран должен заполняться до конца, а не оставлять
+  // пустоту с одной стороны — итоговые наложения от растяжения снимает
+  // релаксация коллизий и жёсткий clamp ниже
+  const clampScale=s=>Math.max(0.6,s);
+  const scaleL=clampScale((cx-rect.x0)/reachL), scaleR=clampScale((rect.x1-cx)/reachR);
+  const scaleU=clampScale((cy-rect.y0)/reachU), scaleD=clampScale((rect.y1-cy)/reachD);
+  for(const p of others){
+    const dx=p.x-cx, dy=p.y-cy;
+    p.x=cx+dx*(dx<0?scaleL:scaleR);
+    p.y=cy+dy*(dy<0?scaleU:scaleD);
+  }
+
+  // финальный проход — только коллизии и границы, убирает остаточные наложения
+  // подписей, которые могло внести растяжение выше
   meta.fx=cx; meta.fy=cy;
   const sim2=d3.forceSimulation(P)
     .force("collide", d3.forceCollide().radius(p=>p.halfW*1.05+3).strength(1).iterations(3))
@@ -619,24 +648,9 @@ function startEntrance(){
   });
 }
 
-runLayout();
-startEntrance();
-
-// пересчёт при ресайзе (debounce, чтобы не гонять симуляцию на каждый пиксель)
-let resizeTimer=null;
-addEventListener("resize",()=>{
-  clearTimeout(resizeTimer);
-  resizeTimer=setTimeout(runLayout,180);
-});
-
-// догрузка веб-шрифта может слегка изменить реальную ширину подписей —
-// пересчитываем halfW точными метриками и один раз мягко доукладываем граф
-if(document.fonts && document.fonts.ready){
-  document.fonts.ready.then(()=>{
-    P.forEach(p=>{ p.halfW=Math.max(p.haloR, labelHalfWidth(p.name)+4); });
-    runLayout();
-  });
-}
+// Первый запуск раскладки — ниже, после того как построены строка фильтров
+// и легенда: safeRect() меряет их реальную высоту (см. комментарий там),
+// а до появления чипов в DOM это ещё не настоящая высота футера.
 
 // twinkle keyframes
 const kf=document.createElement("style");
@@ -724,6 +738,36 @@ function applyFilters(){
   });
 }
 
+// ---------- legend ----------
+const lg=document.getElementById("legend");
+Object.values(CAT).forEach(c=>{
+  const d=document.createElement("div"); d.className="lg";
+  d.innerHTML=`<span>${c.label}</span><i style="color:${c.color};background:${c.color}"></i>`;
+  lg.appendChild(d);
+});
+
+// ---------- первый запуск раскладки ----------
+// только теперь у .filters/.legend есть реальная финальная высота в DOM —
+// safeRect() внутри runLayout() опирается именно на неё.
+runLayout();
+startEntrance();
+
+// пересчёт при ресайзе (debounce, чтобы не гонять симуляцию на каждый пиксель)
+let resizeTimer=null;
+addEventListener("resize",()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(runLayout,180);
+});
+
+// догрузка веб-шрифта может слегка изменить реальную ширину подписей —
+// пересчитываем halfW точными метриками и один раз мягко доукладываем граф
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(()=>{
+    P.forEach(p=>{ p.halfW=Math.max(p.haloR, labelHalfWidth(p.name)+4); });
+    runLayout();
+  });
+}
+
 // ---------- показать, что звёзды кликабельны ----------
 // статичный граф читается как картинка; короткая волна от ядра наружу
 // сообщает об интерактивности быстрее, чем текстовая подсказка
@@ -753,14 +797,6 @@ function applyFilters(){
   setTimeout(wave,1900);                   // после того, как узлы зажглись
   setTimeout(wave,8000);                   // второй раз — если так и не тронули
 })();
-
-// ---------- legend ----------
-const lg=document.getElementById("legend");
-Object.values(CAT).forEach(c=>{
-  const d=document.createElement("div"); d.className="lg";
-  d.innerHTML=`<span>${c.label}</span><i style="color:${c.color};background:${c.color}"></i>`;
-  lg.appendChild(d);
-});
 
 // ---------- background starfield ----------
 const cv=document.getElementById("bg"), cx=cv.getContext("2d");
