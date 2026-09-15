@@ -11,6 +11,16 @@ permalink: /articles/
 Исходники статей, факты и хронология расследований хранятся рядом с каждой
 публикацией в репозитории.
 
+## Android UI и coding agent
+
+Почему screenshot Android-интерфейса оказался для coding agent только первым
+шагом — и как View tree позволил проверять геометрию layout без ручного
+просмотра каждого результата.
+
+[Читать статью]({{ '/articles/android-ui-renderer-mcp/' | relative_url }}){: .btn .btn-blue }
+
+[Проект android-ui-renderer-mcp]({{ '/projects/android-ui-renderer-mcp.html' | relative_url }})
+
 ## CameraX и coding agent
 
 Как мы расследовали рассинхронизацию `Preview` и `ImageAnalysis` при повороте
