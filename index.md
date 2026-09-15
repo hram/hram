@@ -77,3 +77,11 @@ hands-on архитектуры:
 4. [Impact и проекты]({% link docs/impact.md %})
 5. [Мой Tech Radar](https://hram.github.io/hram/radar/index.html)
 6. [Созвездие AI-проектов]({{ '/project-galaxy.html' | relative_url }})
+
+## Статьи
+{: .no_toc }
+
+Истории о реальном инженерном опыте: от расследования багов до разработки с
+coding agents.
+
+[Открыть статьи]({{ '/articles/' | relative_url }}){: .btn .btn-blue }
