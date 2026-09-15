@@ -3,6 +3,7 @@ layout: default
 title: «Coding agent» почти починил мне CameraX задержкой
 description: Как мы с coding agent расследовали рассинхронизацию Preview и ImageAnalysis при повороте Android-планшета.
 permalink: /articles/camerax-agent/
+nav_exclude: true
 ---
 
 # Coding agent почти починил мне CameraX задержкой. Почему я его остановил
