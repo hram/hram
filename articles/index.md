@@ -20,6 +20,13 @@ permalink: /articles/
 
 [Проект family-messenger](https://github.com/hram/family-messenger)
 
+## Статья про family-messenger которой не случилось
+
+Сохранённая версия первой статьи о Family Messenger, которую не приняла
+модерация Habr.
+
+[Читать статью]({{ '/articles/family-messenger-habr/' | relative_url }}){: .btn .btn-blue }
+
 ## От бумажной карты до проблемного сплита
 
 Как я соединил скан спортивной карты, GPS-трек и официальный протокол, чтобы
